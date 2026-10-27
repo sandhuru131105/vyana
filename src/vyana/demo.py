@@ -38,3 +38,6 @@ def main() -> None:
         print(f"Vyana> {reply(text)}")
         if text.strip() == "/quit":
             return
+
+if __name__ == '__main__':
+    main()
