@@ -1,54 +1,58 @@
+<p align="center"><img src="webui/public/brand/vyana-logo.png" width="160" alt="Vyana logo"></p>
+
 # Vyana
 
-**Status: reverse-engineering plan + small offline learning scaffold. Not a finished Nanobot replacement.**
+Nanobot design + architecture அடிப்படையில் உருவாக்கப்படும் Vyana personal AI assistant.
 
-Vyana என்பது [HKUDS/nanobot](https://github.com/HKUDS/nanobot)-ஐ புரிந்துகொண்டு உருவாக்கத் தொடங்கும் personal AI assistant project. இந்த repo-வில் architecture analysis, REA evidence summary, build roadmap மற்றும் API key தேவையில்லாத offline CLI demo உள்ளன.
+**இப்போது:** actual upstream Python runtime + React/TypeScript WebUI source உள்ளது. இது பழைய offline demo மட்டும் இல்லை. இது Nanobot-ன் source-based adaptation; original architecture/credits பாதுகாக்கப்பட்டுள்ளது. Model/provider configure செய்யாமல் AI பதில் கிடைக்காது.
 
-## இப்போது என்ன உள்ளது?
+**Verified:** Linux Python 3.11 editable install, production frontend build, local gateway + browser bootstrap, 3,745 selected core tests passed (2 skipped), 5 Vyana boundary tests passed. Windows compatibility, real model calls, external channels, native TUI binaries, Docker and 2 CPU / 4 GB performance இன்னும் test செய்யப்படவில்லை. No deployment or paid model calls.
 
-- Nanobot source snapshot-க்கு பொருந்தும் architecture மற்றும் feature map.
-- REA 6.8.0 மூலம் உண்மையில் செய்த **selected frontend static analysis**.
-- Python backend-க்கு தனியாக செய்த AST + manual source review.
-- Vyana product plan, security boundaries மற்றும் acceptance tests.
-- Original Python CLI scaffold: `/help`, `/about`, `/quit`; மற்ற text-க்கு தெளிவான demo reply மட்டும்.
+## Architecture
 
-**இன்னும் இல்லை:** real AI replies, provider integration, tools, memory persistence, browser UI, channels, authentication, deployment. Nanobot-ன் full renamed copy அல்ல. REA full Python backend-ஐ analyze செய்ததாகக் கூறவில்லை.
+React WebUI / CLI / channels → gateway + message bus → session/context → provider + agent/tool loop → SQLite/history → streamed response. See [architecture](docs/ARCHITECTURE.md) and [build status](docs/BUILD_STATUS.md).
 
-## Quick start · Python 3.11+
+Internal `nanobot` Python imports/protocol names remain deliberately intact. Product launcher is `vyana`; data defaults to `~/.vyana`. Install into a separate virtual environment, not an existing Nanobot environment.
+
+## Source setup
+
+Requires Python 3.11+ and Node.js/npm for building the UI from source. The following commands use a normal shell; Python activation differs by OS.
+
+```sh
+git clone https://github.com/sandhuru131105/vyana.git
+cd vyana
+python -m venv .venv
+```
+
+Windows PowerShell: `.venv\Scripts\Activate.ps1` (subject to your execution policy). Linux: `source .venv/bin/activate`. Then:
 
 ```sh
 python -m pip install -e .
-vyana --about
-vyana
+cd webui
+npm ci --ignore-scripts
+npm run build
+cd ..
+python -m vyana --help
+python -m vyana webui
 ```
 
-Install இல்லாமலும் repo root-ல்:
+Follow local first-run setup. Select and configure a provider/model before requesting AI responses. Fees, account terms and privacy depend on that choice; no provider or credentials are included. Browser UI is local by default. Do not expose it publicly without reviewing authentication and access controls.
 
-```sh
-PYTHONPATH=src python -m vyana --about
-PYTHONPATH=src python -m vyana
-PYTHONPATH=src python -m unittest discover -s tests -v
-```
+## Safety and limits
 
-இப்போது எல்லாம் offline. API key, network call, shell execution அல்லது model charge இல்லை.
+Inherited file/shell tools can modify files and run commands. The UI can show **Full Access** by default. Review access mode, tool permissions, workspace restrictions and [security notes](SECURITY.md) before connecting a model. Do not give an untrusted model broad access to personal/work files. Channels, automation and paid integrations are not configured by this build.
 
-## படிக்க வேண்டிய வரிசை
+Automatic upstream update execution/staging is blocked in Vyana so a Nanobot release cannot silently overwrite this adaptation. Source updates must be reviewed from this Vyana repo. Upstream installers/release scripts and Docker files are retained for reference, not verified Vyana distribution channels.
 
-1. [Product plan](docs/PRODUCT_PLAN.md) - நம்ம version-ன் proposed scope.
-2. [Reverse engineering](docs/REVERSE_ENGINEERING.md) - upstream எப்படி வேலை செய்கிறது.
-3. [Architecture](docs/ARCHITECTURE.md) - components மற்றும் message flow.
-4. [Roadmap](docs/ROADMAP.md) - அடுத்த milestones + done criteria.
-5. [Security](SECURITY.md) - safe defaults மற்றும் public-repo விதிகள்.
-6. [Low RAM/CPU plan](docs/LIGHTWEIGHT.md) - confirmed priority, proposed approach, no benchmark claim.
-7. [REA method](docs/REA_METHOD.md) - உண்மையில் ஓடிய command, scope, limitations.
+## Project notes
 
-## Source & credits
+- [Build status and deviations](docs/BUILD_STATUS.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Source reverse engineering](docs/REVERSE_ENGINEERING.md)
+- [REA scope and evidence](docs/REA_METHOD.md)
+- [Deferred low-resource work](docs/LIGHTWEIGHT.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Attribution](NOTICE.md) and [third-party notices](THIRD_PARTY_NOTICES.md)
+- [Upstream guide](docs/UPSTREAM_README.md), describing Nanobot behavior and commands, not verified Vyana releases
 
-- Upstream: HKUDS/nanobot, Python package version **0.3.5**.
-- Reviewed commit: `b07b3eac244ff7faa7eeb2d4777fe54dbae1b6d2`.
-- Analysis date: **27 October 2026**.
-- Upstream authors: **Xubin Ren and the nanobot contributors**. Their work is not claimed as original Vyana code.
-- REA: [morluto/rea](https://github.com/morluto/rea), package `rea-agents@6.8.0`, MIT, copyright morluto.
-- [License](LICENSE), [upstream license](LICENSES/nanobot-MIT.txt), [attribution](NOTICE.md), [third-party notes](THIRD_PARTY_NOTICES.md).
-
-Vyana name is the requested working project name. Trademark/domain availability has not been checked. No affiliation with HKUDS, Nanobot, or REA is implied. No deployment or paid service is configured.
+Original learning demo is retained as `python -m vyana.demo` for reference; it is not the main application. Hardware and OS targets remain unbenchmarked; architecture first, optimization later.

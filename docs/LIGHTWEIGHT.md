@@ -20,6 +20,6 @@ No Nanobot runtime/RAM baseline was measured in this review. The offline scaffol
 
 Pending owner choice: optimize RAM/CPU or download/install size first, and which features must remain?
 
-## Confirmed priority
+## Current priority
 
-Owner selected **low RAM/CPU**. No numeric target/hardware supplied. Proposed profile: remote-provider option (no local weights), lazy provider/channel imports, one foreground turn at first, bounded history/tool output/iterations, and optional background jobs opt-in. These are architecture recommendations, not implemented optimizations or permission to drop existing features. Must-keep features and real-device baseline remain open.
+Low RAM/CPU remains a desired direction, but the owner subsequently selected **Nanobot design/architecture first; optimization later**. The actual upstream architecture is retained rather than replaced with a CLI-only demo. OS/resource targets and numerical acceptance budgets require later device measurements. No RAM/CPU reduction is claimed. See BUILD_STATUS.md.

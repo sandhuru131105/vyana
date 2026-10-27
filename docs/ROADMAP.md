@@ -1,39 +1,9 @@
-# Build roadmap
+# Roadmap
 
-Milestones are proposed sequence, not delivery-date promises.
+1. **Current baseline:** attributed Nanobot source architecture imported; Vyana launcher/home/logo; Linux local install/frontend build, selected offline tests and local gateway/UI inspection. See BUILD_STATUS.md for exact scope.
+2. Validate Windows installation and gateway/UI, native TUI source build, production wheel, and adaptation-specific regressions. No completion/date promise.
+3. Choose one provider/model, costs/privacy and safe tool-access defaults before live AI use. No paid calls or external-account setup without authorization.
+4. Test real sessions/tools/channel behaviors in scoped temporary workspaces. Preserve upstream notices and review dependency/security updates.
+5. Measure actual target hardware and optimize RAM/CPU without changing required features silently.
 
-## M0 · present foundation
-
-- Public repo and honest status, provenance/licenses, source analysis.
-- Offline CLI smoke tests, no keys or target execution.
-- Done: `--about`, `/help`, empty/normal input, EOF and `/quit` tested.
-
-## M1 · provider boundary
-
-- Define Message, ModelResponse, ToolCall and Provider protocols.
-- Fake provider tests first; then one opt-in real provider.
-- Done: normal response, timeout, quota/auth error, cancellation; no credentials in logs; model/budget selected before paid calls.
-
-## M2 · safe agent loop
-
-- Typed read-only tool; max iterations, request/response limits, cancellation.
-- Done: malformed args, unknown tool, denied path, symlink escape and size limit tests. No arbitrary shell or message send.
-
-## M3 · local sessions
-
-- SQLite schema/migrations, history, export/delete and privacy notice.
-- Done: reload, migration, concurrent-write/error, export/delete tests; secrets excluded from chat logs.
-
-## M4 · web UI
-
-- React chat, stream status, retry/cancel, visible tool trace and settings.
-- Done: API authentication, localhost default, origin policy, secret-free frontend bundle, accessible mobile/desktop checks and backend contract tests.
-
-## M5 · one integration
-
-- Pick one channel only after an access-control and sender/recipient policy exists.
-- Done: duplicate delivery/retry tests, allowlist and permissions, redacted logs, explicit sending authority, operating-cost review.
-
-## Release gate
-
-License audit for copied assets/dependencies; tests with fake providers; documented security boundaries; reproducible build; no live keys/runtime data; rollback path. Never label source analysis as a passed runtime/security audit.
+No automatic releases/deployment are enabled. Architecture source presence does not establish tested support for every inherited feature.

@@ -1,48 +1,29 @@
-# Architecture
+# Vyana architecture
 
-## Upstream Nanobot · observed source structure
+Vyana now follows the actual Nanobot implementation pinned in NOTICE.md. The previous independent CLI-first proposal is superseded by the architecture-first request.
 
 ```text
-CLI / web UI / messaging channel
-              |
-       message routing / gateway
-              |
-       session + context builder
-              |
-          AgentRunner <----> model provider
-              |
+React WebUI / CLI / messaging channel
+                 |
+         gateway + MessageBus
+                 |
+      session + context builder
+                 |
+   AgentLoop / runner <----> LLM provider
+                 |
         ToolRegistry / tools
-              |
-  session persistence + outbound events
-              |
-           user interface
+                 |
+ SQLite/session persistence + outbound events
+                 |
+             interface
 ```
 
-Core: Python; UI: React/TypeScript/Vite; session persistence: SQLite in this snapshot. External model endpoints, channel credentials and optional integrations are distinct boundaries.
+- Python runtime: `nanobot/agent`, `bus`, `providers`, `session`, `config`.
+- Web gateway: `nanobot/webui` and channel WebSocket adapter.
+- UI: `webui` React/TypeScript; shared events in `packages/client-events`.
+- Native terminal source: `tui`, retained but binaries not built/tested here.
+- Vyana launch boundary: `src/vyana/cli.py` delegates to `nanobot.cli.entry`.
+- Default home: `~/.vyana`, explicit `--home` remains supported.
+- Models/providers and optional channels remain external boundaries needing configuration.
 
-## Vyana · proposed incremental design
-
-```text
-Stage 0 (present): Offline CLI -> deterministic demo response
-Stage 1: CLI -> provider interface -> fake provider / explicit real-provider opt-in
-Stage 2: bounded agent loop -> read-only tools -> tool results -> model
-Stage 3: sessions + export/delete -> local persistence
-Stage 4: React UI -> authenticated local API / event stream
-Stage 5: one approved channel + automation
-```
-
-Keep provider calls separate from UI, persistence and tool execution so tests use fakes. Do not let a model response invoke arbitrary Python or shell strings. Tools must have typed input, bounded output and an explicit authority policy. Never put API keys in browser bundles.
-
-## Suggested module ownership (future, not all implemented)
-
-- `cli`: input/output only.
-- `providers`: request/response adapter and usage/cost metadata.
-- `agent`: iteration budget, cancellation and tool-result loop.
-- `tools`: schemas, allowlists, approval policy, safe execution.
-- `sessions`: local data model, migration, export and delete.
-- `api`: authentication and transport, not direct arbitrary tool access.
-- `webui`: presentation, pending/error states, trace visibility.
-
-## Decisions still open
-
-Primary audience and unique benefit; local-only versus hosted; first model provider and budget; first tool; browser UI versus CLI priority; whether later to fork upstream code or continue an independent small implementation. Do not rename upstream import/package/config paths blindly. Vyana is the product/repo name, not proof that a full Python package rename is complete.
+Retaining modules does not enable or authorize their real-world use. File/shell tools are inherited and can be powerful. Automatic upstream update staging/execution is blocked so Vyana is not overwritten with a Nanobot package. See BUILD_STATUS.md for inspected/tested boundaries and unverified areas.

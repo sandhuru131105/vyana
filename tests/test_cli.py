@@ -2,7 +2,7 @@ import io
 import unittest
 from contextlib import redirect_stdout
 from unittest.mock import patch
-from vyana.cli import ABOUT, HELP, MAX_INPUT, main, reply
+from vyana.demo import ABOUT, HELP, MAX_INPUT, main, reply
 class CliTests(unittest.TestCase):
     def test_about(self): self.assertEqual(reply('/about'), ABOUT)
     def test_help(self): self.assertEqual(reply('/help'), HELP)
